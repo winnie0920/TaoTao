@@ -1,0 +1,37 @@
+//驗證條件
+export const isRequired = (msg: string) => (v: string) =>
+  v.trim().length > 0 || msg;
+
+export const isEmail = (msg: string) => (v: string) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || msg;
+
+export const minLength = (len: number, msg: string) => (v: string) =>
+  v.length >= len || msg || `至少 ${len} 碼`;
+
+export const isPhone = (msg: string) => (v: string) =>
+  /^09\d{8}$/.test(v.replace(/[\s()-]/g, "")) ||
+  /^0[2-8]\d{7,8}$/.test(v.replace(/[\s()-]/g, "")) ||
+  msg;
+
+// 驗證程式碼
+type Rule = (value: string) => true | string;
+
+export const validate = (
+  form: Record<string, any>,
+  rules: Record<string, Rule[]>,
+) => {
+  const errors: Record<string, string> = {};
+
+  for (const key in rules) {
+    if (!rules[key]) continue;
+    for (const rule of rules[key]) {
+      const result = rule(form[key]);
+      if (result !== true) {
+        errors[key] = result;
+        break;
+      }
+    }
+  }
+
+  return Object.keys(errors).length ? errors : null;
+};
