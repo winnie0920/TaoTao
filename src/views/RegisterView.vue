@@ -67,7 +67,7 @@ const goRegister = async () => {
       </h2>
     </div>
 
-    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-lg">
+    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-lg px-6 sm:px-0">
       <form class="grid grid-cols-1 gap-6" @submit.prevent="goRegister">
         <div class="grid grid-cols-12 gap-6">
           <!-- 姓氏（內部分欄） -->

@@ -6,11 +6,13 @@ import tailwindcss from "@tailwindcss/vite";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
+import { HeadlessUiResolver } from "unplugin-vue-components/resolvers";
 
 const pathSrc = path.resolve(__dirname, "src");
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: process.env.NODE_ENV === "production" ? "/TaoTao/" : "./",
   plugins: [
     vue(),
     createSvgIconsPlugin({
@@ -25,6 +27,7 @@ export default defineConfig({
     Components({
       dirs: ["src/components"],
       dts: "src/components.d.ts",
+      resolvers: [HeadlessUiResolver()],
     }),
   ],
   resolve: {

@@ -22,7 +22,7 @@ const routeDispatch = (url?: string, slug?: string, dispatch?: string) => {
 };
 
 const axiosConfig = {
-  baseURL: "http://localhost:8080/taotao",
+  baseURL: import.meta.env.VITE_TAOTAO_API_BASE,
   timeout: 15000,
   headers: {
     "Content-Type": "application/json; charset=utf-8",

@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(),
   routes: [
     {
       path: "/",
@@ -26,8 +26,17 @@ const router = createRouter({
         {
           path: "webs",
           name: "UserWebs",
-          meta: { icon: "Side-Bookmark", title: "海外好禮" },
           component: () => import("@/views/user/UserWebs.vue"),
+        },
+        {
+          path: "favorite",
+          name: "UserFavorite",
+          component: () => import("@/views/user/UserFavorite.vue"),
+        },
+        {
+          path: "profile",
+          name: "UserProfile",
+          component: () => import("@/views/user/UserProfile.vue"),
         },
       ],
     },

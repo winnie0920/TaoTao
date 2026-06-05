@@ -12,6 +12,15 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AlertMsg: typeof import('./components/user/AlertMsg.vue')['default']
+    Dialog: typeof import('@headlessui/vue')['Dialog']
+    DialogPanel: typeof import('@headlessui/vue')['DialogPanel']
+    Disclosure: typeof import('@headlessui/vue')['Disclosure']
+    DisclosureButton: typeof import('@headlessui/vue')['DisclosureButton']
+    DisclosurePanel: typeof import('@headlessui/vue')['DisclosurePanel']
+    Popover: typeof import('@headlessui/vue')['Popover']
+    PopoverButton: typeof import('@headlessui/vue')['PopoverButton']
+    PopoverGroup: typeof import('@headlessui/vue')['PopoverGroup']
+    PopoverPanel: typeof import('@headlessui/vue')['PopoverPanel']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SvgIcon: typeof import('./components/SvgIcon.vue')['default']
