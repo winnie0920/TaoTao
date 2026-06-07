@@ -1,0 +1,1 @@
+import{n as e}from"./index-DfysRh5p.js";var t={};function n(e,t){return`123`}var r=e(t,[[`render`,n]]);export{r as default};

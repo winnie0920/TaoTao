@@ -1,1 +1,0 @@
-import{n as e}from"./index-CNg_LGFs.js";var t={};function n(e,t){return`456`}var r=e(t,[[`render`,n]]);export{r as default};
