@@ -1,7 +1,6 @@
 const env = import.meta.env as any;
 const { VITE_TAOTAO_TOKEN_KEY, VITE_TAOTAO_REFRESH_TOKEN_KEY } = env;
-import type { ApiResponse, SaveTokenResponse } from "@/types/auth";
-
+import type { ApiResponse, SaveTokenResponse } from "@/types";
 function getToken(): string | undefined {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${VITE_TAOTAO_TOKEN_KEY}=`);

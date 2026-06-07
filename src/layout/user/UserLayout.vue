@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { apiLogout } from "@/api/login";
+import JWT from "@/utils/cookies.js";
+import router from "@/router";
+import { useAlertStore } from "@/stores/alertStore";
+const alertStore = useAlertStore();
+
 type MenuItem = {
   name: string;
   to: string;
@@ -9,10 +15,18 @@ const Menu: MenuItem[] = [
   { name: "收藏", to: "/favorite", icon: "Common-Heart" },
   { name: "我的", to: "/profile", icon: "Common-User" },
 ];
+
+// 登出
+const goLogout = async () => {
+  const res = await apiLogout();
+  JWT.removeAllToken();
+  alertStore.pushMsg("success", res.msg);
+  router.push({ name: "Login" });
+};
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col">
+  <div class="min-h-dvh flex flex-col overflow-x-hidden">
     <!-- 電腦版 HEADER -->
     <header class="hidden lg:flex bg-white">
       <nav
@@ -28,7 +42,7 @@ const Menu: MenuItem[] = [
             v-for="item in Menu"
             :key="item.name"
             :to="item.to"
-            class="font-semibold"
+            class="font-semibold transition duration-150 hover:text-black hover:scale-105"
             :class="{
               'text-black font-bold': $route.path === item.to,
               'text-gray-500 hover:text-black': $route.path !== item.to,
@@ -38,7 +52,12 @@ const Menu: MenuItem[] = [
           </router-link>
         </div>
 
-        <div class="font-semibold">登出</div>
+        <button
+          @click="goLogout"
+          class="font-semibold transition duration-150 hover:text-black hover:scale-105 hover:cursor-pointer"
+        >
+          登出
+        </button>
       </nav>
     </header>
 
@@ -54,26 +73,33 @@ const Menu: MenuItem[] = [
           <p class="font-semibold">TaoTao</p>
         </div>
 
-        <button class="font-semibold">登出</button>
+        <button
+          @click="goLogout"
+          class="font-semibold transition duration-150 active:scale-95 active:opacity-70 hover:opacity-80 hover:cursor-pointer"
+        >
+          登出
+        </button>
       </nav>
     </header>
-    <!-- CONTENT -->
-    <main class="flex-1 overflow-y-auto">
+    <main class="flex-1 overflow-y-auto overscroll-contain">
       <router-view v-slot="{ Component, route }">
         <transition name="fade" mode="out-in">
-          <div :key="route.fullPath" class="w-full h-full">
+          <div
+            :key="route.fullPath"
+            class="max-w-294 mx-auto px-4 w-full h-full"
+          >
             <component :is="Component" />
           </div>
         </transition>
       </router-view>
     </main>
     <!-- FOOTER -->
-    <footer class="lg:hidden bg-white flex">
+    <footer class="lg:hidden bg-white flex shrink-0">
       <router-link
         v-for="item in Menu"
         :key="item.name"
         :to="item.to"
-        class="flex-1 flex flex-col items-center py-2"
+        class="flex-1 flex flex-col items-center py-2 font-semibold transition duration-150 hover:text-black"
         :class="$route.path === item.to ? 'text-black' : 'text-gray-500'"
       >
         <SvgIcon :icon-name="item.icon!" class="h-6 w-6" />

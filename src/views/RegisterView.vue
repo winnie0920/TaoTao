@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import router from "@/router";
-import type { RegisterForm } from "@/types/auth";
+import type { RegisterForm } from "@/types";
 import { useAlertStore } from "@/stores/alertStore";
 import { apiRegister } from "@/api/login.js";
 import {

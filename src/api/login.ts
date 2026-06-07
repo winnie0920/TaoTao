@@ -3,6 +3,7 @@ import JWT from "@/utils/cookies.js";
 import {
   PER_AUTH,
   URL_AUTHENTICATE,
+  URL_LOGOUT,
   URL_REFRESH_TOKEN,
   URL_REGISTER,
 } from "@/utils/constants.js";
@@ -22,12 +23,20 @@ export const apiRegister = async (data: any) => {
 export const apiAuthenticate = async (data: any) => {
   try {
     const res = await APITaos.postBody(PER_AUTH, URL_AUTHENTICATE, data);
-
     JWT.saveAllToken(res.data);
-
     return res.data;
   } catch (e) {
     console.error("ERR! apiAuthenticate", e);
+    return Promise.reject(e);
+  }
+};
+
+export const apiLogout = async () => {
+  try {
+    const res = await APITaos.postBody(PER_AUTH, URL_LOGOUT);
+    return res.data;
+  } catch (e) {
+    console.error("ERR! apiLogout", e);
     return Promise.reject(e);
   }
 };
@@ -43,9 +52,8 @@ export const apiRefreshToken = async () => {
       URL_REFRESH_TOKEN,
       refreshToken,
     );
-    const { data } = res.data;
-    JWT.saveAllToken(data);
-    return data;
+    JWT.saveAllToken(res.data);
+    return res.data;
   } catch (e) {
     console.error("ERR! apiRefreshToken", e);
     JWT.removeAllToken();

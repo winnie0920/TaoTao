@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-import type { Button, ConfirmData, Message } from "@/types/alert";
+import type { Button, ConfirmData, Message } from "@/types";
 import { alertConfig } from "@/config/alert";
 
 export const useAlertStore = defineStore("alert", {

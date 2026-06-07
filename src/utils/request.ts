@@ -6,8 +6,13 @@ import type {
   InternalAxiosRequestConfig,
 } from "axios";
 import JWT from "@/utils/cookies.js";
-import { PER_AUTH, URL_AUTHENTICATE, URL_REGISTER } from "@/utils/constants.js";
-import type { ApiResponse } from "@/types/auth";
+import {
+  PER_AUTH,
+  URL_AUTHENTICATE,
+  URL_REGISTER,
+  URL_LOGOUT,
+} from "@/utils/constants.js";
+import type { ApiResponse } from "@/types";
 import { apiRefreshToken } from "@/api/login.js";
 import { useAlertStore } from "@/stores/alertStore";
 
@@ -48,7 +53,6 @@ AxiosTao.interceptors.request.use(
     if (!noNeedTokenUrls.includes(config.url ?? "")) {
       // 嘗試 refresh token
       await apiRefreshToken();
-
       const token = JWT.getToken();
 
       // 沒 token → 強制登出
@@ -60,8 +64,9 @@ AxiosTao.interceptors.request.use(
         await router.push({ name: "Login" });
         return config;
       }
+
       // 帶上 token
-      config.headers.set("token", token);
+      config.headers.set("Authorization", `Bearer ${token}`);
     }
 
     return config;
@@ -77,6 +82,7 @@ AxiosTao.interceptors.response.use(
     const alertStore = useAlertStore();
 
     const { code, msg } = response.data;
+
     // 抛出意外錯誤 Http200 -> code!==200
     if (code < 200 || code >= 300) {
       alertStore.pushMsg("error", msg || "操作失敗，請稍後再試！");
@@ -152,7 +158,9 @@ const APITaos = {
 
   postRefresh(url: string, slug: string, refreshToken: string) {
     return AxiosRefresh.post(routeDispatch(url, slug), null, {
-      params: { refreshToken },
+      headers: {
+        Authorization: `Bearer ${refreshToken}`,
+      },
     });
   },
 };

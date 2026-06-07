@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import router from "@/router";
-import type { LoginForm } from "@/types/auth";
+import type { LoginForm } from "@/types";
 import { useAlertStore } from "@/stores/alertStore";
 import { apiAuthenticate } from "@/api/login.js";
 const alertStore = useAlertStore();
