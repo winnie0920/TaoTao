@@ -2,7 +2,6 @@
 defineProps<{
   modelValue: boolean;
   title: string;
-  loading?: boolean;
 }>();
 
 defineSlots<{

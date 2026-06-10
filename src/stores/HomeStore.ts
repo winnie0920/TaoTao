@@ -1,13 +1,11 @@
 import { defineStore } from "pinia";
 
-import type { Country } from "@/types";
-import { apiCountries } from "@/api/home";
+import type { Country, Categories } from "@/types";
+import { apiCountries, apiCategories } from "@/api/home";
 export const useHomeStore = defineStore("home", {
   state: () => ({
     countries: [] as Country[],
-    selected: "" as string,
-    loading: false,
-    loaded: false,
+    cateGories: [] as Categories[],
   }),
 
   getters: {
@@ -17,20 +15,20 @@ export const useHomeStore = defineStore("home", {
 
   actions: {
     async initCountries() {
-      if (this.loaded) return;
-      this.loading = true;
       try {
         const res = await apiCountries();
         this.countries = res.data;
-        this.loaded = true;
       } catch (e) {
         console.error(e);
-      } finally {
-        this.loading = false;
       }
     },
-    setSelect(key: string) {
-      this.selected = key;
+    async initCategories() {
+      try {
+        const res = await apiCategories();
+        this.cateGories = res.data;
+      } catch (e) {
+        console.error(e);
+      }
     },
   },
 });

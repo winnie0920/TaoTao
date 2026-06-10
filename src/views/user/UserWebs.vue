@@ -46,7 +46,6 @@ const step = computed(() => {
       action: submit,
     };
   }
-
   if (page.value === "form") {
     return {
       text: "下一步",
@@ -80,10 +79,11 @@ const schema = computed<Field[]>(() => [
     name: "category",
     label: "分類",
     col: 1,
-    options: [],
+    options: homeStore.cateGories,
   },
 ]);
 
+// 設定驗證
 const rules = {
   title: [isRequired("標題必填")],
   content: [isRequired("內容必填"), minLength(10, "內容至少10字")],
@@ -103,8 +103,6 @@ const initialForm = {
 const form = ref(structuredClone(initialForm));
 
 const { allTags, selectedTags, toggleTag, removeTag } = usePostTags(form);
-
-const isLoading = ref(false);
 
 // 同步 URL 的 country query
 const country = computed<string>({
@@ -153,6 +151,7 @@ const handleClose = () => {
 
 onMounted(() => {
   homeStore.initCountries();
+  homeStore.initCategories();
 });
 </script>
 
@@ -188,7 +187,6 @@ onMounted(() => {
       :title="
         page === 'form' ? '新增貼文' : page === 'tag' ? '選擇標籤' : '選擇照片'
       "
-      :loading="isLoading"
       @submit="submit"
       @close="handleClose"
     >

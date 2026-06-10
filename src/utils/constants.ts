@@ -5,4 +5,5 @@ export const URL_LOGOUT = "logout";
 export const URL_REFRESH_TOKEN = "refresh-token";
 
 export const URL_COUNTRIES = "countries";
+export const URL_CATEGORIES = "categories";
 export const URL_MEAL = "meal";
