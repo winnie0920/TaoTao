@@ -3,6 +3,9 @@ import { apiLogout } from "@/api/login";
 import JWT from "@/utils/cookies.js";
 import router from "@/router";
 import { useAlertStore } from "@/stores/alertStore";
+import { useModalStoreStore } from "@/stores/modalStore";
+
+const modalStore = useModalStoreStore();
 const alertStore = useAlertStore();
 
 type MenuItem = {
@@ -64,7 +67,7 @@ const goLogout = async () => {
     <!-- 手機板 HEADER -->
     <header class="lg:hidden bg-white pt-[env(safe-area-inset-top)]">
       <nav class="flex items-center justify-between px-6 py-3">
-        <button>
+        <button @click="modalStore.openCreate()">
           <SvgIcon icon-name="Common-Plus" class="h-5 w-5" />
         </button>
 

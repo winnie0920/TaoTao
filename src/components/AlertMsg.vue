@@ -41,7 +41,7 @@ watch(
   <transition-group
     tag="div"
     name="move-up"
-    class="absolute top-16 left-1/2 flex -translate-x-1/2 flex-col items-center gap-6"
+    class="fixed top-6 left-1/2 z-9999 flex -translate-x-1/2 flex-col items-center gap-6"
   >
     <div
       v-for="(item, index) in alertStore.messages"

@@ -1,3 +1,4 @@
+import type { Rule } from "@/types";
 //驗證條件
 export const isRequired = (msg: string) => (v: string) =>
   v.trim().length > 0 || msg;
@@ -14,7 +15,6 @@ export const isPhone = (msg: string) => (v: string) =>
   msg;
 
 // 驗證程式碼
-type Rule = (value: string) => true | string;
 
 export const validate = (
   form: Record<string, any>,

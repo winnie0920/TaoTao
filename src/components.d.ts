@@ -12,10 +12,16 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AlertMsg: typeof import('./components/AlertMsg.vue')['default']
+    FormRenderer: typeof import('./components/FormRenderer.vue')['default']
+    ModelPopup: typeof import('./components/ModelPopup.vue')['default']
+    PostTagStep: typeof import('./components/PostTagStep.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScrollerBar: typeof import('./components/ScrollerBar.vue')['default']
     SearchBar: typeof import('./components/SearchBar.vue')['default']
     SvgIcon: typeof import('./components/SvgIcon.vue')['default']
+    TagSection: typeof import('./components/TagSection.vue')['default']
+    TagSelector: typeof import('./components/TagSelector.vue')['default']
+    UserWebFormStep: typeof import('./components/user/UserWebFormStep.vue')['default']
   }
 }

@@ -3,9 +3,9 @@ import router from "@/router";
 import type { LoginForm } from "@/types";
 import { useAlertStore } from "@/stores/alertStore";
 import { apiAuthenticate } from "@/api/login.js";
-const alertStore = useAlertStore();
 import { isRequired, isEmail, minLength, validate } from "@/utils/validators";
 
+const alertStore = useAlertStore();
 const loginForm = reactive<LoginForm>({
   email: "",
   password: "",
