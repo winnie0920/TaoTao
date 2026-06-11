@@ -1,11 +1,11 @@
 <script setup lang="ts">
-export interface Items {
-  key: string;
-  name: string;
-  icon: string;
-}
+import { useDragScroll } from "@/composables/useDragScroll";
+
+import type { Country } from "@/types";
+const { container, startDrag, onDrag, stopDrag } = useDragScroll();
+
 const props = defineProps<{
-  items: Items[];
+  items: Country[];
   modelValue: string;
 }>();
 
@@ -19,7 +19,14 @@ const selectItems = (key: string) => {
 </script>
 
 <template>
-  <div class="overflow-x-auto no-scrollbar">
+  <div
+    ref="container"
+    class="overflow-x-auto no-scrollbar cursor-grab select-none"
+    @mousedown="startDrag"
+    @mousemove="onDrag"
+    @mouseup="stopDrag"
+    @mouseleave="stopDrag"
+  >
     <div class="flex gap-6 w-max px-2">
       <button
         v-for="c in items"

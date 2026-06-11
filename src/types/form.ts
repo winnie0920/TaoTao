@@ -5,7 +5,12 @@ export type Field = {
   name: string;
   label: string;
   placeholder?: string;
-  options?: { key: string; name: string }[];
+  options?: { id: number; key: string; name: string }[];
   rules?: Rule[];
   col?: 1 | 2;
+};
+
+export type UploadImage = {
+  file: File;
+  preview: string;
 };

@@ -1,7 +1,19 @@
 import type { Rule } from "@/types";
 //驗證條件
-export const isRequired = (msg: string) => (v: string) =>
-  v.trim().length > 0 || msg;
+export const isRequired =
+  (msg: string) =>
+  (v: unknown): true | string => {
+    if (typeof v === "string") {
+      return v.trim().length > 0 || msg;
+    }
+    if (typeof v === "number") {
+      return v !== null && v !== undefined ? true : msg;
+    }
+    if (Array.isArray(v)) {
+      return v.length > 0 || msg;
+    }
+    return !!v || msg;
+  };
 
 export const isEmail = (msg: string) => (v: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || msg;

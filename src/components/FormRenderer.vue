@@ -23,6 +23,12 @@ const update = (key: string, value: any) => {
   });
 };
 
+// 選擇 option
+const selectOption = (fieldName: string, value: number) => {
+  update(fieldName, value);
+  openKey.value = null;
+};
+
 // 開關下拉選單
 const toggle = (field: Field) => {
   const key = field.name;
@@ -30,16 +36,10 @@ const toggle = (field: Field) => {
   openKey.value = openKey.value === key ? null : key;
 };
 
-// 選擇 option
-const selectOption = (key: string, value: string) => {
-  update(key, value);
-  openKey.value = null;
-};
-
 // label
 const getLabel = (field: Field) => {
   const val = props.modelValue[field.name];
-  return field.options?.find((o) => o.key === val)?.name || "請選擇";
+  return field.options?.find((o) => o.id === val)?.name || "請選擇";
 };
 
 // 點擊外面關閉彈窗
@@ -107,12 +107,12 @@ onBeforeUnmount(() => {
           >
             <li
               v-for="opt in field.options"
-              :key="opt.key"
-              @click="selectOption(field.name, opt.key)"
+              :key="opt.id"
+              @click="selectOption(field.name, opt.id)"
               class="cursor-pointer px-3 py-2 transition-all hover:bg-zinc-50 active:bg-zinc-100"
               :class="{
                 'bg-zinc-100 text-zinc-900 font-medium':
-                  modelValue[field.name] === opt.key,
+                  modelValue[field.name] === opt.id,
               }"
             >
               {{ opt.name }}

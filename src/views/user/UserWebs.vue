@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
-import ModelPopup from "@/components/ModelPopup.vue";
 import { useHomeStore } from "@/stores/HomeStore";
 import { useModalStoreStore } from "@/stores/modalStore";
 import { useAlertStore } from "@/stores/alertStore";
-
+import { apiPostImg } from "@/api/image.ts";
 import { isRequired, minLength, validate } from "@/utils/validators";
-import { usePostTags } from "@/types/usePostTags";
-import type { Field } from "@/types";
+import { usePostTags } from "@/composables/usePostTags";
+import type { Field, UploadImage } from "@/types";
 
 const route = useRoute();
 const router = useRouter();
@@ -15,11 +13,23 @@ const homeStore = useHomeStore();
 const modalStore = useModalStoreStore();
 const alertStore = useAlertStore();
 
+// 初始from
+const initialForm = {
+  title: "",
+  content: "",
+  country: 0 as number,
+  category: "",
+  images: [] as UploadImage[],
+  imageUrls: [] as string[],
+  tags: [] as number[],
+};
+// 複製一份來填寫內容
+const form = ref(structuredClone(initialForm));
+
 const page = ref<"form" | "tag" | "review">("form");
 
 // 下一步
 const next = () => {
-  console.log(form.value);
   const errors = validate(form.value, rules);
   if (errors) {
     const msg = Object.values(errors).join("\n");
@@ -53,6 +63,7 @@ const step = computed(() => {
     };
   }
 });
+// 欄位設定
 const schema = computed<Field[]>(() => [
   {
     type: "input",
@@ -91,17 +102,6 @@ const rules = {
   category: [isRequired("請選分類")],
 };
 
-// 初始from
-const initialForm = {
-  title: "",
-  content: "",
-  country: "",
-  category: "",
-  tags: [] as number[],
-};
-// 複製一份來填寫內容
-const form = ref(structuredClone(initialForm));
-
 const { allTags, selectedTags, toggleTag, removeTag } = usePostTags(form);
 
 // 同步 URL 的 country query
@@ -111,12 +111,11 @@ const country = computed<string>({
     router.replace({
       query: {
         ...route.query,
-        country: val || null,
+        country: val || undefined,
       },
     });
   },
 });
-
 // 同步 URL 的 search query
 const keyword = computed({
   get: () => (route.query.search as string) ?? "",
@@ -130,8 +129,21 @@ const keyword = computed({
   },
 });
 
-const submit = () => {
+const submit = async () => {
+  // const res = await uploadImages(form.value.images);
+  // form.value.imageUrls = res.data;
   console.log(form.value);
+};
+
+// 新增圖片
+const uploadImages = async (images: UploadImage[]) => {
+  const formData = new FormData();
+  images.forEach((img) => {
+    formData.append("files", img.file);
+  });
+  const res = await apiPostImg(formData);
+  console.log(res);
+  return res;
 };
 
 // 清空表單欄位
@@ -141,7 +153,6 @@ const resetForm = () => {
     tags: [],
   };
 };
-
 // 關閉表單
 const handleClose = () => {
   page.value = "form";
@@ -152,6 +163,7 @@ const handleClose = () => {
 onMounted(() => {
   homeStore.initCountries();
   homeStore.initCategories();
+  console.log(homeStore.countries);
 });
 </script>
 
@@ -208,6 +220,7 @@ onMounted(() => {
         :form="form"
         @toggle="toggleTag"
       />
+      <UploadImg v-else v-model="form.images" />
 
       <template #footer>
         <div class="flex w-full items-center justify-between">

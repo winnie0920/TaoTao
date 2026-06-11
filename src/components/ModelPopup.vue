@@ -32,7 +32,7 @@ const close = () => {
       <!-- 電腦版 -->
       <div class="hidden lg:flex items-center justify-center h-full">
         <div
-          class="relative w-120 h-[80vh] bg-white rounded-md border border-zinc-200 flex flex-col shadow-sm"
+          class="relative w-120 bg-white rounded-md border border-zinc-200 flex flex-col shadow-sm"
         >
           <!-- header -->
           <div
