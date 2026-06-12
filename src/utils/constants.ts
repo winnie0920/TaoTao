@@ -6,4 +6,6 @@ export const URL_REFRESH_TOKEN = "refresh-token";
 
 export const URL_COUNTRIES = "countries";
 export const URL_CATEGORIES = "categories";
+export const URL_TAGS = "tags";
+export const URL_ARTICLE = "article";
 export const URL_UPLOAD = "upload";

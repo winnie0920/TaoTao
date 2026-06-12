@@ -32,7 +32,7 @@ const close = () => {
       <!-- 電腦版 -->
       <div class="hidden lg:flex items-center justify-center h-full">
         <div
-          class="relative w-120 bg-white rounded-md border border-zinc-200 flex flex-col shadow-sm"
+          class="relative w-120 max-h-[85vh] bg-white rounded-md border border-zinc-200 flex flex-col shadow-sm"
         >
           <!-- header -->
           <div
@@ -51,7 +51,7 @@ const close = () => {
           </div>
 
           <!-- content -->
-          <div class="flex-1 px-5 py-4">
+          <div class="flex-1 overflow-y-auto px-5 py-4">
             <slot />
           </div>
 

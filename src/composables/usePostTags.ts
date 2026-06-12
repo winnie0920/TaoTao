@@ -1,21 +1,10 @@
-import { computed, ref } from "vue";
-
-export type Tag = {
-  id: number;
-  name: string;
-};
+import { useHomeStore } from "@/stores/HomeStore";
 
 export function usePostTags(form: any) {
-  const allTags = ref<Tag[]>([
-    { id: 1, name: "Vue" },
-    { id: 2, name: "Java" },
-    { id: 3, name: "Spring" },
-    { id: 4, name: "TypeScript" },
-    { id: 5, name: "Docker" },
-  ]);
+  const homeStore = useHomeStore();
 
   const selectedTags = computed(() =>
-    allTags.value.filter((t) => form.value.tags.includes(t.id)),
+    homeStore.tags.filter((t) => form.value.tags.includes(t.id)),
   );
 
   const toggleTag = (id: number) => {
@@ -29,7 +18,6 @@ export function usePostTags(form: any) {
   };
 
   return {
-    allTags,
     selectedTags,
     toggleTag,
     removeTag,

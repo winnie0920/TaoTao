@@ -3,6 +3,7 @@ import { useHomeStore } from "@/stores/HomeStore";
 import { useModalStoreStore } from "@/stores/modalStore";
 import { useAlertStore } from "@/stores/alertStore";
 import { apiPostImg } from "@/api/image.ts";
+import { apiPostArticle } from "@/api/home.ts";
 import { isRequired, minLength, validate } from "@/utils/validators";
 import { usePostTags } from "@/composables/usePostTags";
 import type { Field, UploadImage } from "@/types";
@@ -17,8 +18,8 @@ const alertStore = useAlertStore();
 const initialForm = {
   title: "",
   content: "",
-  country: 0 as number,
-  category: "",
+  countryId: 0 as number,
+  categoryId: 0 as number,
   images: [] as UploadImage[],
   imageUrls: [] as string[],
   tags: [] as number[],
@@ -73,24 +74,24 @@ const schema = computed<Field[]>(() => [
     col: 2,
   },
   {
-    type: "textarea",
-    name: "content",
-    label: "內容",
-    col: 2,
-  },
-  {
     type: "select",
-    name: "country",
+    name: "countryId",
     label: "國家",
     col: 1,
     options: homeStore.countries,
   },
   {
     type: "select",
-    name: "category",
+    name: "categoryId",
     label: "分類",
     col: 1,
     options: homeStore.cateGories,
+  },
+  {
+    type: "textarea",
+    name: "content",
+    label: "內容",
+    col: 2,
   },
 ]);
 
@@ -98,11 +99,11 @@ const schema = computed<Field[]>(() => [
 const rules = {
   title: [isRequired("標題必填")],
   content: [isRequired("內容必填"), minLength(10, "內容至少10字")],
-  country: [isRequired("請選國家")],
-  category: [isRequired("請選分類")],
+  countryId: [isRequired("請選國家")],
+  categoryId: [isRequired("請選分類")],
 };
 
-const { allTags, selectedTags, toggleTag, removeTag } = usePostTags(form);
+const { selectedTags, toggleTag, removeTag } = usePostTags(form);
 
 // 同步 URL 的 country query
 const country = computed<string>({
@@ -111,7 +112,7 @@ const country = computed<string>({
     router.replace({
       query: {
         ...route.query,
-        country: val || undefined,
+        country: val || null,
       },
     });
   },
@@ -119,7 +120,7 @@ const country = computed<string>({
 // 同步 URL 的 search query
 const keyword = computed({
   get: () => (route.query.search as string) ?? "",
-  set: (val: string) => {
+  set: (val) => {
     router.replace({
       query: {
         ...route.query,
@@ -130,20 +131,33 @@ const keyword = computed({
 });
 
 const submit = async () => {
-  // const res = await uploadImages(form.value.images);
-  // form.value.imageUrls = res.data;
-  console.log(form.value);
+  try {
+    if (form.value.images.length > 0) {
+      const ImageRes = await uploadImages(form.value.images);
+      form.value.imageUrls = ImageRes.data;
+    }
+    const { images, ...submitForm } = form.value;
+    const res = await apiPostArticle(submitForm);
+    if (res.code == 200) {
+      alertStore.pushMsg("success", res.msg);
+    }
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 // 新增圖片
 const uploadImages = async (images: UploadImage[]) => {
-  const formData = new FormData();
-  images.forEach((img) => {
-    formData.append("files", img.file);
-  });
-  const res = await apiPostImg(formData);
-  console.log(res);
-  return res;
+  try {
+    const formData = new FormData();
+    images.forEach((img) => {
+      formData.append("files", img.file);
+    });
+    const res = await apiPostImg(formData);
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 // 清空表單欄位
@@ -163,7 +177,7 @@ const handleClose = () => {
 onMounted(() => {
   homeStore.initCountries();
   homeStore.initCategories();
-  console.log(homeStore.countries);
+  homeStore.initTags();
 });
 </script>
 
@@ -216,7 +230,7 @@ onMounted(() => {
       <!-- 選擇Tag -->
       <PostTagStep
         v-else-if="page === 'tag'"
-        :allTags="allTags"
+        :allTags="homeStore.tags"
         :form="form"
         @toggle="toggleTag"
       />
@@ -233,14 +247,14 @@ onMounted(() => {
           <div class="flex items-center gap-2">
             <button
               v-if="page !== 'form'"
-              class="px-4 py-2 text-sm rounded-md border border-zinc-300 text-zinc-700"
+              class="px-4 py-2 text-sm rounded-md border border-zinc-300 text-zinc-700 active:scale-95 transition"
               @click="back"
             >
               上一步
             </button>
             <button
               v-if="step"
-              class="px-4 py-2 text-sm font-semibold rounded-md bg-zinc-900 text-white"
+              class="px-4 py-2 text-sm font-semibold rounded-md bg-zinc-900 text-white active:scale-95 transition"
               @click="step.action"
             >
               {{ step.text }}

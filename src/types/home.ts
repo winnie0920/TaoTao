@@ -11,3 +11,8 @@ export interface Categories {
   name: string;
   icon: string;
 }
+
+export type Tags = {
+  id: number;
+  name: string;
+};
