@@ -1,0 +1,1 @@
+import{i as e}from"./index-BkMwyDAy.js";var t={};function n(e,t){return`456`}var r=e(t,[[`render`,n]]);export{r as default};
