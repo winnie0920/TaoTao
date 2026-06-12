@@ -1,0 +1,1 @@
+import{P as e,o as t}from"./index-47hSgUEg.js";var n=t(`modalStore`,()=>{let t=e(!1),n=e(`create`);return{isOpen:t,mode:n,openCreate:()=>{n.value=`create`,t.value=!0},openEdit:()=>{n.value=`edit`,t.value=!0},close:()=>{t.value=!1}}});export{n as t};
