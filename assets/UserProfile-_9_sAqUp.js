@@ -1,0 +1,1 @@
+import{i as e}from"./index-BqAmbdY3.js";var t={};function n(e,t){return`789`}var r=e(t,[[`render`,n]]);export{r as default};
