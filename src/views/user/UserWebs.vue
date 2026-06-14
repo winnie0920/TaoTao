@@ -27,8 +27,6 @@ const initialForm = {
 // 複製一份來填寫內容
 const form = ref(structuredClone(initialForm));
 
-const page = ref<"form" | "tag" | "review">("form");
-
 // 下一步
 const next = () => {
   const errors = validate(form.value, rules);
@@ -37,27 +35,26 @@ const next = () => {
     alertStore.pushMsg("error", msg);
     return;
   }
-  page.value = "review";
+  modalStore.changeStep("review");
 };
 
 // 上一步
 const back = () => {
-  if (page.value === "review") {
-    page.value = "form";
-  } else if (page.value === "tag") {
-    page.value = "form";
+  if (modalStore.step == "review" || "tag") {
+    modalStore.changeStep("form");
+    modalStore.changeTitle("新增貼文");
   }
 };
 
 // 步驟
 const step = computed(() => {
-  if (page.value === "review") {
+  if (modalStore.step === "review") {
     return {
       text: "發佈",
       action: submit,
     };
   }
-  if (page.value === "form") {
+  if (modalStore.step === "form") {
     return {
       text: "下一步",
       action: next,
@@ -169,9 +166,8 @@ const resetForm = () => {
 };
 // 關閉表單
 const handleClose = () => {
-  page.value = "form";
   resetForm();
-  modalStore.isOpen = false;
+  modalStore.close();
 };
 
 onMounted(() => {
@@ -189,7 +185,7 @@ onMounted(() => {
         <h2 class="text-xl font-semibold">海外好禮報報</h2>
         <button
           class="hidden lg:flex items-center gap-1 text-sm rounded-md border border-zinc-300 bg-white px-3 py-1 text-zinc-900 transition-all duration-200 ease-in-out hover:bg-zinc-100 active:bg-zinc-200"
-          @click="modalStore.openCreate()"
+          @click="modalStore.openModal('create', null, '新增貼文')"
         >
           + 新增貼文
         </button>
@@ -209,48 +205,49 @@ onMounted(() => {
       <div>文章列表（API）</div>
     </template>
     <ModelPopup
-      v-model="modalStore.isOpen"
-      :title="
-        page === 'form' ? '新增貼文' : page === 'tag' ? '選擇標籤' : '選擇照片'
-      "
-      @submit="submit"
-      @close="handleClose"
+      v-show="modalStore.mode == 'create'"
+      @close="modalStore.close"
+      :title="modalStore.title"
+      width="w-[480px]"
     >
       <!-- 表單欄位 -->
       <UserWebFormStep
-        v-if="page === 'form'"
+        v-if="modalStore.step === 'form'"
         :form="form"
         :schema="schema"
         :selectedTags="selectedTags"
         @update:form="form = $event"
-        @open-tags="page = 'tag'"
+        @open-tags="
+          (modalStore.changeStep('tag'), modalStore.changeTitle('新增標籤'))
+        "
         @remove-tag="removeTag"
       />
 
       <!-- 選擇Tag -->
       <PostTagStep
-        v-else-if="page === 'tag'"
+        v-if="modalStore.step === 'tag'"
         :allTags="homeStore.tags"
         :form="form"
         @toggle="toggleTag"
       />
-      <UploadImg v-else v-model="form.images" />
+      <UploadImg v-if="modalStore.step === 'review'" v-model="form.images" />
 
       <template #footer>
         <div class="flex w-full items-center justify-between">
           <button
+            v-if="modalStore.step !== 'tag'"
             class="px-4 py-2 text-sm rounded-md border border-zinc-300 text-zinc-700 active:scale-95 transition"
             @click="handleClose()"
           >
             取消
           </button>
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 ml-auto">
             <button
-              v-if="page !== 'form'"
+              v-if="modalStore.step !== 'form'"
               class="px-4 py-2 text-sm rounded-md border border-zinc-300 text-zinc-700 active:scale-95 transition"
               @click="back"
             >
-              上一步
+              {{ modalStore.step === "tag" ? "確認" : "上一步" }}
             </button>
             <button
               v-if="step"
@@ -263,5 +260,8 @@ onMounted(() => {
         </div>
       </template>
     </ModelPopup>
+
+    <!-- 卡片頁面 -->
+    <ArticleGrid />
   </div>
 </template>

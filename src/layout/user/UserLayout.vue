@@ -29,7 +29,7 @@ const goLogout = async () => {
 </script>
 
 <template>
-  <div class="min-h-dvh flex flex-col overflow-x-hidden">
+  <div class="h-dvh flex flex-col overflow-hidden">
     <!-- 電腦版 HEADER -->
     <header class="hidden lg:flex bg-white">
       <nav
@@ -65,9 +65,9 @@ const goLogout = async () => {
     </header>
 
     <!-- 手機板 HEADER -->
-    <header class="lg:hidden bg-white pt-[env(safe-area-inset-top)]">
+    <header class="lg:hidden shrink-0 bg-white pt-[env(safe-area-inset-top)]">
       <nav class="flex items-center justify-between px-6 py-3">
-        <button @click="modalStore.openCreate()">
+        <button @click="modalStore.openModal('create', null, '新增貼文')">
           <SvgIcon icon-name="Common-Plus" class="h-5 w-5" />
         </button>
 
@@ -84,20 +84,19 @@ const goLogout = async () => {
         </button>
       </nav>
     </header>
-    <main class="flex-1 overflow-y-auto overscroll-contain">
-      <router-view v-slot="{ Component, route }">
-        <transition name="fade" mode="out-in">
-          <div
-            :key="route.fullPath"
-            class="max-w-294 mx-auto px-4 w-full h-full"
-          >
-            <component :is="Component" />
-          </div>
-        </transition>
-      </router-view>
+    <main class="flex-1 min-h-0 overflow-hidden">
+      <div class="h-full overflow-y-auto no-scrollbar">
+        <router-view v-slot="{ Component, route }">
+          <transition name="fade" mode="out-in">
+            <div :key="route.fullPath" class="max-w-294 mx-auto px-4 w-full">
+              <component :is="Component" />
+            </div>
+          </transition>
+        </router-view>
+      </div>
     </main>
     <!-- FOOTER -->
-    <footer class="lg:hidden bg-white flex shrink-0">
+    <footer class="lg:hidden shrink-0 bg-white flex">
       <router-link
         v-for="item in Menu"
         :key="item.name"

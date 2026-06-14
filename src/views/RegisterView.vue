@@ -54,14 +54,11 @@ const goRegister = async () => {
   <div
     class="h-screen flex items-center flex-1 flex-col justify-center bg-white"
   >
-    <div class="sm:mx-auto sm:w-full sm:max-w-lg">
-      <img
-        class="mx-auto h-10 w-auto"
-        src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=zinc&shade=600"
-        alt="Your Company"
-      />
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm flex flex-col items-center">
+      <SvgIcon icon-name="LOGO" class="h-8 w-8" />
+
       <h2
-        class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-zinc-900"
+        class="mt-4 text-center text-2xl font-bold tracking-tight text-zinc-900"
       >
         TaoTao
       </h2>

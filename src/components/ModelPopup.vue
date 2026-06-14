@@ -1,29 +1,32 @@
 <script setup lang="ts">
-defineProps<{
-  modelValue: boolean;
-  title: string;
+import { useModalStoreStore } from "@/stores/modalStore";
+const modalStore = useModalStoreStore();
+const props = defineProps<{
+  title?: string;
+  width?: string;
 }>();
-
 defineSlots<{
   default?: () => any;
   footer?: () => any;
 }>();
 
 const emit = defineEmits<{
-  (e: "update:modelValue", value: boolean): void;
   (e: "submit"): void;
   (e: "close"): void;
 }>();
 
 const close = () => {
   emit("close");
-  emit("update:modelValue", false);
 };
 </script>
 
 <template>
   <Transition name="fade">
-    <div v-if="modelValue" class="fixed inset-0 z-1">
+    <div
+      v-if="modalStore.mode"
+      class="fixed inset-0 overflow-hidden h-full"
+      :class="[modalStore.mode === 'view' ? 'z-50' : 'z-10']"
+    >
       <div
         class="absolute inset-0 bg-black/40 backdrop-blur-sm hidden lg:block"
         @click="close"
@@ -32,7 +35,8 @@ const close = () => {
       <!-- 電腦版 -->
       <div class="hidden lg:flex items-center justify-center h-full">
         <div
-          class="relative w-120 max-h-[85vh] bg-white rounded-md border border-zinc-200 flex flex-col shadow-sm"
+          class="relative bg-white rounded-md border flex flex-col shadow-sm h-[85vh]"
+          :class="width"
         >
           <!-- header -->
           <div
@@ -51,7 +55,13 @@ const close = () => {
           </div>
 
           <!-- content -->
-          <div class="flex-1 overflow-y-auto px-5 py-4">
+          <div
+            :class="[
+              modalStore.mode === 'view'
+                ? 'h-[85vh] flex flex-col overflow-hidden'
+                : 'flex-1 min-h-0 overflow-y-auto px-5 py-4',
+            ]"
+          >
             <slot />
           </div>
 
@@ -64,7 +74,7 @@ const close = () => {
         </div>
       </div>
       <!-- 手機板 -->
-      <div class="lg:hidden flex flex-col h-full bg-white">
+      <div class="lg:hidden flex flex-col h-dvh bg-white">
         <!-- header -->
         <div
           class="flex items-center justify-between px-4 py-3 border-b border-zinc-200"
@@ -72,9 +82,15 @@ const close = () => {
           <div class="text-base font-semibold text-zinc-900">
             {{ title }}
           </div>
+          <button
+            class="text-zinc-400 hover:text-zinc-600 transition"
+            @click="close"
+          >
+            ✕
+          </button>
         </div>
         <!-- content -->
-        <div class="flex-1 overflow-y-auto px-4 py-4">
+        <div class="flex-1 overflow-y-auto px-4 py-4 no-scroller">
           <slot />
         </div>
         <!-- footer -->

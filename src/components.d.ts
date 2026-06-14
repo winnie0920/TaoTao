@@ -12,6 +12,8 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AlertMsg: typeof import('./components/AlertMsg.vue')['default']
+    ArticleCard: typeof import('./components/ArticleCard.vue')['default']
+    ArticleGrid: typeof import('./components/ArticleGrid.vue')['default']
     FormRenderer: typeof import('./components/FormRenderer.vue')['default']
     ModelPopup: typeof import('./components/ModelPopup.vue')['default']
     PostTagStep: typeof import('./components/PostTagStep.vue')['default']
