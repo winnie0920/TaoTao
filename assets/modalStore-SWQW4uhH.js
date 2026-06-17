@@ -1,0 +1,1 @@
+import{o as e}from"./index-BX-G9CW1.js";var t=e(`modal`,{state:()=>({isOpen:!1,mode:null,step:`form`,title:``}),actions:{openModal(e,t,n){this.mode=e,this.step=`form`,this.title=n??``,this.isOpen=!0},changeStep(e){this.step=e},changeTitle(e){this.title=e},resetStep(){this.step=`form`},close(){this.isOpen=!1,this.mode=null,this.step=`form`,this.title=``}}});export{t};
