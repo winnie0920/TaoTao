@@ -3,7 +3,7 @@ import { useHomeStore } from "@/stores/HomeStore";
 import { useModalStoreStore } from "@/stores/modalStore";
 import { useAlertStore } from "@/stores/alertStore";
 import { apiPostImg } from "@/api/image.ts";
-import { apiPostArticle } from "@/api/home.ts";
+import { apiPostArticle } from "@/api/Article.ts";
 import { isRequired, minLength, validate } from "@/utils/validators";
 import { usePostTags } from "@/composables/usePostTags";
 import type { Field, UploadImage } from "@/types";
@@ -174,6 +174,7 @@ onMounted(() => {
   homeStore.initCountries();
   homeStore.initCategories();
   homeStore.initTags();
+  homeStore.initArticles(true);
 });
 </script>
 

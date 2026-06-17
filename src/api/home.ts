@@ -1,10 +1,5 @@
 import APITaos from "@/utils/request";
-import {
-  URL_COUNTRIES,
-  URL_CATEGORIES,
-  URL_ARTICLE,
-  URL_TAGS,
-} from "@/utils/constants.js";
+import { URL_COUNTRIES, URL_CATEGORIES, URL_TAGS } from "@/utils/constants.js";
 
 // 取得國家列表
 export const apiGetCountries = async () => {
@@ -35,17 +30,6 @@ export const apiGetTags = async () => {
     return res.data;
   } catch (e) {
     console.error("ERR! apiGetTags", e);
-    return Promise.reject(e);
-  }
-};
-
-// 新增文章列表
-export const apiPostArticle = async (data: any) => {
-  try {
-    const res = await APITaos.postBody("", URL_ARTICLE, data);
-    return res.data;
-  } catch (e) {
-    console.error("ERR! apiPostArticle", e);
     return Promise.reject(e);
   }
 };

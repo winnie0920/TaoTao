@@ -90,7 +90,7 @@ const close = () => {
           </button>
         </div>
         <!-- content -->
-        <div class="flex-1 overflow-y-auto px-4 py-4 no-scroller">
+        <div class="flex-1 overflow-y-auto px-4 py-4 no-scrollbar">
           <slot />
         </div>
         <!-- footer -->
