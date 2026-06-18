@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import type { Article } from "@/types"; // 請確保這裡引入的是你的文章介面
-
-// 💡 只接收一個 article 物件
+import type { Article } from "@/types";
 defineProps<{
   article: Article;
 }>();
@@ -29,7 +27,7 @@ defineProps<{
         <span
           class="text-[11px] bg-orange-50 text-orange-600 px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0"
         >
-          <SvgIcon icon-name="Common-Heart" class="w-3 h-3" />
+          <SvgIcon :icon-name="article.categoryIcon" class="w-3 h-3" />
           {{ article.categoryName }}
         </span>
       </div>

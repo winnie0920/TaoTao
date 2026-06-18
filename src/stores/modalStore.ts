@@ -16,6 +16,7 @@ export const useModalStoreStore = defineStore("modal", {
       this.step = "form";
       this.title = title ?? "";
       this.isOpen = true;
+      window.history.pushState({ modalOpen: true }, "");
     },
     changeStep(step: FormStep) {
       this.step = step;
@@ -31,6 +32,9 @@ export const useModalStoreStore = defineStore("modal", {
       this.mode = null;
       this.step = "form";
       this.title = "";
+      if (window.history.state?.modalOpen) {
+        window.history.back();
+      }
     },
   },
 });

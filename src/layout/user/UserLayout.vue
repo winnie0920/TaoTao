@@ -26,6 +26,22 @@ const goLogout = async () => {
   alertStore.pushMsg("success", res.msg);
   router.push({ name: "Login" });
 };
+
+// 如果彈窗開著，按上一頁時攔截下來，並關閉彈窗
+const handlePopState = (event: PopStateEvent) => {
+  if (modalStore.isOpen) {
+    modalStore.isOpen = false;
+    modalStore.mode = null;
+    modalStore.step = "form";
+  }
+};
+
+onMounted(() => {
+  window.addEventListener("popstate", handlePopState);
+});
+onUnmounted(() => {
+  window.removeEventListener("popstate", handlePopState);
+});
 </script>
 
 <template>
@@ -35,11 +51,13 @@ const goLogout = async () => {
       <nav
         class="mx-auto flex max-w-7xl items-center justify-between p-4 px-8 w-full"
       >
-        <div class="flex items-center gap-2">
+        <router-link
+          to="/webs"
+          class="flex items-center gap-2 cursor-pointer transition-transform duration-300 ease-out hover:scale-105 active:scale-100"
+        >
           <SvgIcon icon-name="LOGO" class="h-8 w-8" />
-          <p class="font-semibold">TaoTao</p>
-        </div>
-
+          <p class="font-semibold text-lg">TaoTao</p>
+        </router-link>
         <div class="flex gap-10">
           <router-link
             v-for="item in Menu"
@@ -71,10 +89,13 @@ const goLogout = async () => {
           <SvgIcon icon-name="Common-Plus" class="h-5 w-5" />
         </button>
 
-        <div class="flex items-center gap-2">
+        <router-link
+          to="/webs"
+          class="flex items-center gap-2 cursor-pointer transition-opacity hover:opacity-80"
+        >
           <SvgIcon icon-name="LOGO" class="h-6 w-6" />
           <p class="font-semibold">TaoTao</p>
-        </div>
+        </router-link>
 
         <button
           @click="goLogout"
@@ -109,6 +130,10 @@ const goLogout = async () => {
       </router-link>
     </footer>
   </div>
+
+  <!-- 彈窗 -->
+  <ArticleEditor />
+  <ArticleView />
 </template>
 
 <style></style>

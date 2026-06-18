@@ -5,29 +5,30 @@ const props = defineProps<{
   images?: ArticleImage[];
 }>();
 
+// 頁數
 const currentImgIndex = ref(0);
 
-// 💡 改動：從物件陣列中提取 imageUrl 字串
 const articleImages = computed<string[]>(() => {
   if (Array.isArray(props.images) && props.images.length > 0) {
-    // 把 ImageInfo 物件轉成 imageUrl 字串陣列
     return props.images.map((img) => img.imageUrl);
   }
   return [];
 });
 
-// 其他邏輯不變...
+// 往前
 const prevImage = (e: Event) => {
   e.stopPropagation();
   if (currentImgIndex.value > 0) currentImgIndex.value--;
 };
 
+// 往後
 const nextImage = (e: Event) => {
   e.stopPropagation();
   if (currentImgIndex.value < articleImages.value.length - 1)
     currentImgIndex.value++;
 };
 
+// 重置頁數
 const resetIndex = () => {
   currentImgIndex.value = 0;
 };

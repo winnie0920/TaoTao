@@ -35,7 +35,7 @@ const close = () => {
       <!-- 電腦版 -->
       <div class="hidden lg:flex items-center justify-center h-full">
         <div
-          class="relative bg-white rounded-md border flex flex-col shadow-sm h-[85vh]"
+          class="relative bg-white rounded-md flex flex-col shadow-sm h-[85vh]"
           :class="width"
         >
           <!-- header -->
@@ -47,6 +47,7 @@ const close = () => {
             </div>
 
             <button
+              type="button"
               class="text-zinc-400 hover:text-zinc-600 transition"
               @click="close"
             >
@@ -83,6 +84,7 @@ const close = () => {
             {{ title }}
           </div>
           <button
+            type="button"
             class="text-zinc-400 hover:text-zinc-600 transition"
             @click="close"
           >

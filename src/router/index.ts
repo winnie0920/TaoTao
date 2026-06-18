@@ -29,6 +29,11 @@ const router = createRouter({
           component: () => import("@/views/user/UserWebs.vue"),
         },
         {
+          path: "search",
+          name: "UserSearch",
+          component: () => import("@/views/user/UserSearch.vue"),
+        },
+        {
           path: "favorite",
           name: "UserFavorite",
           component: () => import("@/views/user/UserFavorite.vue"),

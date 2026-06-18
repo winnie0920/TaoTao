@@ -10,6 +10,7 @@ export const useHomeStore = defineStore("home", {
     tags: [] as Tags[],
 
     articles: [] as Article[],
+    selectedArticle: null as Article | null,
 
     lastId: null as number | null,
     hasMore: true,
@@ -17,8 +18,8 @@ export const useHomeStore = defineStore("home", {
   }),
 
   getters: {
-    countryName: (state) => (key: string) =>
-      state.countries.find((c) => c.key === key)?.name ?? "",
+    countryName: (state) => (id: number) =>
+      state.countries.find((c) => c.id === id)?.name ?? "",
   },
 
   actions: {
@@ -49,16 +50,26 @@ export const useHomeStore = defineStore("home", {
       }
     },
 
-    async initArticles(reset = false) {
+    async initArticles(
+      reset = false,
+      filter: {
+        keyword?: string;
+        categoryId?: number;
+        countryId?: number;
+      } = {},
+    ) {
       this.loading = true;
-
       try {
-        const param: any = {
+        const params = {
           size: 10,
           lastId: reset ? null : this.lastId,
+          keyword: filter.keyword || null,
+          categoryId: filter.categoryId || null,
+          countryId: filter.countryId || null,
         };
 
-        const res = await apiGetArticle(param);
+        // 這裡直接把物件傳給 API
+        const res = await apiGetArticle(params);
         const data: ArticlePage = res.data;
 
         if (reset) {
