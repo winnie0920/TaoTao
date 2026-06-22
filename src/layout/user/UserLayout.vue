@@ -55,7 +55,7 @@ onUnmounted(() => {
           to="/webs"
           class="flex items-center gap-2 cursor-pointer transition-transform duration-300 ease-out hover:scale-105 active:scale-100"
         >
-          <SvgIcon icon-name="LOGO" class="h-8 w-8" />
+          <SvgIcon icon-name="LOGO" class="text-black h-8 w-8" />
           <p class="font-semibold text-lg">TaoTao</p>
         </router-link>
         <div class="flex gap-10">

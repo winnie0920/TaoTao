@@ -9,4 +9,7 @@ export const URL_CATEGORIES = "categories";
 export const URL_TAGS = "tags";
 export const URL_ARTICLE = "article";
 export const URL_LIKE = "like";
+export const URL_FAVORITE = "favorite";
+export const URL_COMMENT = "comment";
+
 export const URL_UPLOAD = "upload";

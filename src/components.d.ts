@@ -29,6 +29,5 @@ declare module 'vue' {
     SvgIcon: typeof import('./components/SvgIcon.vue')['default']
     TagSection: typeof import('./components/model/TagSection.vue')['default']
     UploadImg: typeof import('./components/model/UploadImg.vue')['default']
-    UserWebFormStep: typeof import('./components/user/UserWebFormStep.vue')['default']
   }
 }

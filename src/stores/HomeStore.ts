@@ -1,7 +1,14 @@
 import { defineStore } from "pinia";
-import type { Country, Categories, Tags, Article, ArticlePage } from "@/types";
+import type {
+  Country,
+  Categories,
+  Tags,
+  Article,
+  ArticlePage,
+  Comment,
+} from "@/types";
 import { apiGetCountries, apiGetCategories, apiGetTags } from "@/api/home";
-import { apiGetArticle } from "@/api/Article";
+import { apiGetArticle, apiGetComment } from "@/api/Article";
 
 export const useHomeStore = defineStore("home", {
   state: () => ({
@@ -11,6 +18,7 @@ export const useHomeStore = defineStore("home", {
 
     articles: [] as Article[],
     selectedArticle: null as Article | null,
+    comments: [] as Comment[],
 
     lastId: null as number | null,
     hasMore: true,
@@ -49,7 +57,6 @@ export const useHomeStore = defineStore("home", {
         console.error(e);
       }
     },
-
     async initArticles(
       reset = false,
       filter: {
@@ -68,7 +75,6 @@ export const useHomeStore = defineStore("home", {
           countryId: filter.countryId || null,
         };
 
-        // 這裡直接把物件傳給 API
         const res = await apiGetArticle(params);
         const data: ArticlePage = res.data;
 
@@ -91,6 +97,16 @@ export const useHomeStore = defineStore("home", {
       this.lastId = null;
       this.hasMore = true;
       await this.initArticles(true);
+    },
+
+    async initComment(articleId: number) {
+      try {
+        const { data } = await apiGetComment(articleId);
+        this.comments = data;
+        console.log(data);
+      } catch (e) {
+        console.error(e);
+      }
     },
   },
 });

@@ -42,6 +42,30 @@ export interface Article {
   tags: ArticleTag[];
 }
 
+export interface LikeStatus {
+  id: number;
+  likeCount: number;
+  liked: boolean;
+}
+
+export interface favoriteStatus {
+  id: number;
+  favoriteCount: number;
+  favorited: boolean;
+}
+
+export interface Comment {
+  id: number;
+  articleId: number;
+  userId: number;
+  canDelete: boolean;
+  username: string;
+  content: string;
+  totalLikes: number;
+  liked: boolean;
+  createdTime?: string;
+}
+
 export interface ArticlePage {
   list: Article[];
   hasMore: boolean;

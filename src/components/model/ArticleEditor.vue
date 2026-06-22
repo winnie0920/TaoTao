@@ -80,7 +80,10 @@ const submit = async () => {
     }
     const { images, ...submitForm } = form.value;
     const res = await apiPostArticle(submitForm);
-    if (res.code == 200) alertStore.pushMsg("success", res.msg);
+    if (res.code == 200) {
+      alertStore.pushMsg("success", res.msg);
+      modalStore.close();
+    }
   } catch (e) {
     console.error(e);
   }

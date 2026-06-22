@@ -1,13 +1,12 @@
 <script setup lang="ts">
+import { ref, computed } from "vue";
 import type { ArticleImage } from "@/types";
 
 const props = defineProps<{
   images?: ArticleImage[];
 }>();
 
-// 頁數
-const currentImgIndex = ref(0);
-
+/** images */
 const articleImages = computed<string[]>(() => {
   if (Array.isArray(props.images) && props.images.length > 0) {
     return props.images.map((img) => img.imageUrl);
@@ -15,20 +14,78 @@ const articleImages = computed<string[]>(() => {
   return [];
 });
 
-// 往前
-const prevImage = (e: Event) => {
-  e.stopPropagation();
+/** index */
+const currentImgIndex = ref(0);
+
+/** drag state */
+const isDragging = ref(false);
+const startX = ref(0);
+const dragOffset = ref(0);
+
+/** 手機 + 滑鼠拖曳 */
+const onTouchStart = (e: TouchEvent) => {
+  isDragging.value = true;
+  const x = e.touches?.[0]?.clientX;
+  if (x == null) return;
+  startX.value = x;
+  dragOffset.value = 0;
+};
+
+const onTouchMove = (e: TouchEvent) => {
+  if (!isDragging.value) return;
+
+  const touch = e.touches?.[0];
+  if (!touch) return;
+
+  dragOffset.value = touch.clientX - startX.value;
+};
+const onTouchEnd = () => finishDrag();
+
+const onMouseDown = (e: MouseEvent) => {
+  isDragging.value = true;
+  startX.value = e.clientX;
+  dragOffset.value = 0;
+};
+
+const onMouseMove = (e: MouseEvent) => {
+  if (!isDragging.value) return;
+  dragOffset.value = e.clientX - startX.value;
+};
+
+const onMouseUp = () => finishDrag();
+
+/** 吸附邏輯 */
+const finishDrag = () => {
+  if (!isDragging.value) return;
+
+  isDragging.value = false;
+
+  const threshold = 80;
+
+  if (dragOffset.value > threshold && currentImgIndex.value > 0) {
+    currentImgIndex.value--;
+  } else if (
+    dragOffset.value < -threshold &&
+    currentImgIndex.value < articleImages.value.length - 1
+  ) {
+    currentImgIndex.value++;
+  }
+
+  dragOffset.value = 0;
+};
+
+/** 按鈕 */
+const prevImage = () => {
   if (currentImgIndex.value > 0) currentImgIndex.value--;
 };
 
-// 往後
-const nextImage = (e: Event) => {
-  e.stopPropagation();
-  if (currentImgIndex.value < articleImages.value.length - 1)
+const nextImage = () => {
+  if (currentImgIndex.value < articleImages.value.length - 1) {
     currentImgIndex.value++;
+  }
 };
 
-// 重置頁數
+/** reset */
 const resetIndex = () => {
   currentImgIndex.value = 0;
 };
@@ -38,31 +95,51 @@ defineExpose({ resetIndex });
 
 <template>
   <div
-    class="w-full lg:w-[55%] bg-black flex items-center justify-center relative group min-h-75 lg:h-full"
+    class="w-full lg:w-[55%] bg-black flex items-center justify-center relative group min-h-75 lg:h-full overflow-hidden"
+    @touchstart="onTouchStart"
+    @touchmove="onTouchMove"
+    @touchend="onTouchEnd"
+    @mousedown="onMouseDown"
+    @mousemove="onMouseMove"
+    @mouseup="onMouseUp"
+    @mouseleave="onMouseUp"
   >
     <template v-if="articleImages.length > 0">
-      <img
-        :src="articleImages[currentImgIndex]"
-        alt="文章圖片"
-        class="w-full h-full object-contain transition-all duration-300"
-      />
+      <div
+        class="flex w-full h-full transition-transform duration-300 ease-out"
+        :style="{
+          transform: `translateX(calc(-${currentImgIndex * 100}% + ${dragOffset}px))`,
+          transition: isDragging ? 'none' : 'transform 300ms ease-out',
+        }"
+      >
+        <img
+          v-for="(img, idx) in articleImages"
+          :key="idx"
+          :src="img"
+          class="w-full h-full shrink-0 object-contain select-none"
+          draggable="false"
+        />
+      </div>
 
+      <!-- 左按鈕 -->
       <button
         v-if="currentImgIndex > 0"
         @click="prevImage"
-        class="absolute left-4 bg-black/50 hover:bg-black/70 text-white w-9 h-9 rounded-full flex items-center justify-center transition opacity-0 group-hover:opacity-100 select-none z-10"
+        class="absolute left-4 bg-black/50 hover:bg-black/70 w-9 h-9 rounded-full flex items-center justify-center transition opacity-0 group-hover:opacity-100 z-10"
       >
-        ◀
+        <SvgIcon icon-name="Common-TriangleL" class="h-6 w-6 text-white" />
       </button>
 
+      <!-- 右按鈕 -->
       <button
         v-if="currentImgIndex < articleImages.length - 1"
         @click="nextImage"
-        class="absolute right-4 bg-black/50 hover:bg-black/70 text-white w-9 h-9 rounded-full flex items-center justify-center transition opacity-0 group-hover:opacity-100 select-none z-10"
+        class="absolute right-4 bg-black/50 hover:bg-black/70 w-9 h-9 rounded-full flex items-center justify-center transition opacity-0 group-hover:opacity-100 z-10"
       >
-        ▶
+        <SvgIcon icon-name="Common-TriangleR" class="h-6 w-6 text-white" />
       </button>
 
+      <!-- dots -->
       <div
         v-if="articleImages.length > 1"
         class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 bg-black/20 px-3 py-1.5 rounded-full backdrop-blur-sm z-10"
@@ -75,7 +152,7 @@ defineExpose({ resetIndex });
           :class="
             currentImgIndex === idx ? 'bg-white scale-125' : 'bg-white/50'
           "
-        ></span>
+        />
       </div>
     </template>
 
