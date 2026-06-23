@@ -1,1 +1,0 @@
-import{i as e}from"./index-0BX06Dn7.js";var t={};function n(e,t){return`789`}var r=e(t,[[`render`,n]]);export{r as default};
