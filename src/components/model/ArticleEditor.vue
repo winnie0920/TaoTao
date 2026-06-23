@@ -82,7 +82,8 @@ const submit = async () => {
     const res = await apiPostArticle(submitForm);
     if (res.code == 200) {
       alertStore.pushMsg("success", res.msg);
-      modalStore.close();
+      handleClose();
+      homeStore.initArticles(true);
     }
   } catch (e) {
     console.error(e);
@@ -113,7 +114,7 @@ const handleClose = () => {
 <template>
   <ModelPopup
     v-show="modalStore.mode == 'create'"
-    @close="modalStore.close"
+    @close="handleClose()"
     :title="modalStore.title"
     width="w-[480px]"
   >

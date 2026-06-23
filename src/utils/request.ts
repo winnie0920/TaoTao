@@ -45,34 +45,32 @@ const noNeedTokenUrls = [
 ];
 
 // 請求攔截器
+let isRefreshing = false;
+let refreshPromise: Promise<string> | null = null;
 AxiosTao.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    const alertStore = useAlertStore();
-
-    // 不需要 token 的 API
-    if (!noNeedTokenUrls.includes(config.url ?? "")) {
-      // 嘗試 refresh token
-      await apiRefreshToken();
-      const token = JWT.getToken();
-
-      // 沒 token → 強制登出
-      if (!token) {
-        alertStore.pushMsg("error", "【無有效Token】請重新登入！");
-        cancelReq.abort();
-        cancelReq = new AbortController();
-
-        await router.push({ name: "Login" });
-        return config;
+    if (noNeedTokenUrls.includes(config.url ?? "")) return config;
+    let token: string | null = JWT.getToken() ?? null;
+    if (!token) {
+      if (!isRefreshing) {
+        isRefreshing = true;
+        // 建立一個刷新任務
+        refreshPromise = apiRefreshToken()
+          .then(() => {
+            isRefreshing = false;
+            return JWT.getToken()!;
+          })
+          .catch((e) => {
+            isRefreshing = false;
+            router.push({ name: "Login" });
+            throw e;
+          });
       }
-
-      // 帶上 token
-      config.headers.set("Authorization", `Bearer ${token}`);
+      token = await refreshPromise;
     }
 
+    config.headers.set("Authorization", `Bearer ${token}`);
     return config;
-  },
-  (err) => {
-    return Promise.reject(err?.response ?? err);
   },
 );
 

@@ -15,6 +15,7 @@ const alertStore = useAlertStore();
 const registerRules = {
   firstname: [isRequired("請輸入姓氏")],
   lastname: [isRequired("請輸入名字")],
+  username: [isRequired("請輸入暱稱")],
   email: [isRequired("請輸入電子郵件"), isEmail("電子郵件格式不正確")],
   password: [isRequired("請輸入密碼"), minLength(6, "密碼至少 6 碼")],
   phone: [isRequired("請輸入電話"), isPhone("手機需為 09 開頭 10 碼")],
@@ -23,6 +24,7 @@ const registerRules = {
 const registerForm = reactive<RegisterForm>({
   email: "",
   password: "",
+  username: "",
   firstname: "",
   lastname: "",
   phone: "",
@@ -93,6 +95,23 @@ const goRegister = async () => {
               name="lastname"
               autocomplete="current-lastname"
               placeholder="請輸入名字"
+            />
+          </div>
+        </div>
+
+        <!-- 暱稱 -->
+        <div class="grid grid-cols-1">
+          <div>
+            <label class="block text-sm/6 font-medium text-zinc-900"
+              >暱稱</label
+            >
+            <input
+              class="mt-2 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-zinc-900 placeholder-zinc-400 transition-all duration-200 ease-in-out focus:border-zinc-500 focus:ring-4 focus:ring-zinc-100 focus:outline-none"
+              v-model="registerForm.username"
+              type="username"
+              name="username"
+              autocomplete="current-username"
+              placeholder="請輸入暱稱"
             />
           </div>
         </div>

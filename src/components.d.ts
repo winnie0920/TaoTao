@@ -19,6 +19,7 @@ declare module 'vue' {
     ArticleView: typeof import('./components/model/ArticleView.vue')['default']
     FormRenderer: typeof import('./components/model/FormRenderer.vue')['default']
     FormStep: typeof import('./components/model/FormStep.vue')['default']
+    LoadingSpinner: typeof import('./components/LoadingSpinner.vue')['default']
     ModelPopup: typeof import('./components/model/ModelPopup.vue')['default']
     PostTagStep: typeof import('./components/model/PostTagStep.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

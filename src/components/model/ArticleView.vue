@@ -34,7 +34,6 @@ const executeStatusUpdate = async <T,>(
   try {
     const response = await apiCall();
     onSuccess(response.data);
-    console.log(response.data);
   } catch (e: any) {
     const serverMsg = e.response?.data?.msg || e.message || "操作失敗";
     console.error(serverMsg);
@@ -87,6 +86,7 @@ const removeComment = async (commentId: number) => {
       homeStore.selectedArticle!.commentCount = data;
       homeStore.initComment(homeStore.selectedArticle!.id);
       openMenuId.value = null;
+      alertStore.pushMsg("success", "刪除成功");
     },
     isDelete,
   );
@@ -118,7 +118,6 @@ const closeMenu = (e: MouseEvent) => {
   });
   if (!clickedInside) {
     openMenuId.value = null;
-    alertStore.pushMsg("success", "刪除成功");
   }
 };
 

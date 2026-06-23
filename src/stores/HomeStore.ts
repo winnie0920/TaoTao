@@ -6,9 +6,14 @@ import type {
   Article,
   ArticlePage,
   Comment,
+  ArticleFilter,
 } from "@/types";
 import { apiGetCountries, apiGetCategories, apiGetTags } from "@/api/home";
-import { apiGetArticle, apiGetComment } from "@/api/Article";
+import {
+  apiGetArticle,
+  apiGetComment,
+  apiGetFavoriteArticle,
+} from "@/api/Article";
 
 export const useHomeStore = defineStore("home", {
   state: () => ({
@@ -23,6 +28,7 @@ export const useHomeStore = defineStore("home", {
     lastId: null as number | null,
     hasMore: true,
     loading: false,
+    refreshing: false, // 重新搜尋專用
   }),
 
   getters: {
@@ -57,48 +63,31 @@ export const useHomeStore = defineStore("home", {
         console.error(e);
       }
     },
+    // 取得文章
     async initArticles(
       reset = false,
-      filter: {
-        keyword?: string;
-        categoryId?: number;
-        countryId?: number;
-      } = {},
-    ) {
-      this.loading = true;
-      try {
-        const params = {
-          size: 10,
-          lastId: reset ? null : this.lastId,
-          keyword: filter.keyword || null,
-          categoryId: filter.categoryId || null,
-          countryId: filter.countryId || null,
-        };
-
-        const res = await apiGetArticle(params);
-        const data: ArticlePage = res.data;
-
-        if (reset) {
-          this.articles = data.list;
-        } else {
-          this.articles.push(...data.list);
-        }
-
-        this.lastId = data.lastId;
-        this.hasMore = data.hasMore;
-      } catch (e) {
-        console.error(e);
-      } finally {
-        this.loading = false;
-      }
+      filter: ArticleFilter = {},
+    ): Promise<void> {
+      await this.fetchArticles(apiGetArticle, reset, {
+        keyword: filter.keyword ?? null,
+        categoryId: filter.categoryId ?? null,
+        countryId: filter.countryId ?? null,
+      });
     },
 
-    async refreshArticles() {
-      this.lastId = null;
-      this.hasMore = true;
-      await this.initArticles(true);
+    // 取得收藏文章
+    async initFavoriteArticles(
+      reset = false,
+      filter: ArticleFilter = {},
+    ): Promise<void> {
+      await this.fetchArticles(apiGetFavoriteArticle, reset, {
+        keyword: filter.keyword ?? null,
+        categoryId: filter.categoryId ?? null,
+        countryId: filter.countryId ?? null,
+      });
     },
 
+    // 取得留言
     async initComment(articleId: number) {
       try {
         const { data } = await apiGetComment(articleId);
@@ -106,6 +95,43 @@ export const useHomeStore = defineStore("home", {
         console.log(data);
       } catch (e) {
         console.error(e);
+      }
+    },
+
+    // 清空文章狀態
+    resetState(): void {
+      this.articles = [];
+      this.lastId = null;
+      this.hasMore = true;
+      this.refreshing = true;
+    },
+
+    async fetchArticles(
+      apiFunc: (params: any) => Promise<any>,
+      reset: boolean,
+      params: any,
+    ): Promise<void> {
+      if (this.loading) return;
+      if (reset) {
+        this.resetState();
+      } else {
+        this.loading = true;
+      }
+      try {
+        const res = await apiFunc({
+          ...params,
+          size: 10,
+          lastId: reset ? null : this.lastId,
+        });
+        const data: ArticlePage = res.data;
+        this.articles = reset ? data.list : [...this.articles, ...data.list];
+        this.lastId = data.lastId;
+        this.hasMore = data.hasMore;
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.loading = false;
+        this.refreshing = false;
       }
     },
   },

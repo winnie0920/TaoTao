@@ -6,6 +6,7 @@ export interface LoginForm {
 export interface RegisterForm {
   firstname: String;
   lastname: String;
+  username: String;
   email: string;
   password: string;
   phone: string;
@@ -20,7 +21,13 @@ export interface ApiResponse<T = any> {
 
 export interface SaveTokenResponse {
   access_token: string;
-  expiredDate: string | number | Date;
+  expired_date: string | number | Date;
   refresh_token: string;
-  expiredDateR: string | number | Date;
+  expired_dateR: string | number | Date;
+}
+
+export interface ArticleFilter {
+  keyword?: string;
+  categoryId?: number;
+  countryId?: number;
 }

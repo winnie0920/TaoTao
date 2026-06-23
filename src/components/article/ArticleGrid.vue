@@ -14,17 +14,22 @@ const openModal = async (item: any) => {
     carouselRef.value?.resetIndex();
   });
   modalStore.openModal("view", item, item.title);
-  try {
-    // 少一支call 評論的 api
-    // const res = await apiGetComments(item.id);
-    // comments.value = res.data;
-  } catch {}
 };
 </script>
 
 <template>
   <div
-    v-if="homeStore.articles.length > 0"
+    v-if="
+      homeStore.refreshing ||
+      (homeStore.loading && homeStore.articles.length === 0)
+    "
+    class="flex justify-center py-20"
+  >
+    <LoadingSpinner :size="5" color-class="text-gray-400" />
+  </div>
+
+  <div
+    v-else-if="homeStore.articles.length > 0"
     class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"
   >
     <ArticleCard
@@ -33,6 +38,7 @@ const openModal = async (item: any) => {
       :article="item"
       @click="openModal(item)"
     />
+
     <ScrollLoader
       :loading="homeStore.loading"
       :hasMore="homeStore.hasMore"
@@ -41,7 +47,7 @@ const openModal = async (item: any) => {
   </div>
 
   <div
-    v-else-if="!homeStore.loading"
+    v-else
     class="flex flex-col items-center justify-center py-20 text-zinc-400"
   >
     <SvgIcon icon-name="Common-Empty" class="w-12 h-12 mb-4 opacity-50" />

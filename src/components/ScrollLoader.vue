@@ -29,21 +29,6 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="root" class="col-span-full flex justify-center py-6">
-    <svg
-      v-if="loading"
-      class="animate-spin h-5 w-5 text-gray-400"
-      viewBox="0 0 24 24"
-      fill="none"
-    >
-      <circle
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        stroke-width="4"
-        class="opacity-25"
-      />
-      <path fill="currentColor" class="opacity-75" d="M4 12a8 8 0 018-8v8H4z" />
-    </svg>
+    <LoadingSpinner v-if="loading" :size="4" color-class="text-gray-400" />
   </div>
 </template>

@@ -22,37 +22,18 @@ const isDragging = ref(false);
 const startX = ref(0);
 const dragOffset = ref(0);
 
-/** 手機 + 滑鼠拖曳 */
-const onTouchStart = (e: TouchEvent) => {
-  isDragging.value = true;
-  const x = e.touches?.[0]?.clientX;
-  if (x == null) return;
-  startX.value = x;
-  dragOffset.value = 0;
-};
-
-const onTouchMove = (e: TouchEvent) => {
-  if (!isDragging.value) return;
-
-  const touch = e.touches?.[0];
-  if (!touch) return;
-
-  dragOffset.value = touch.clientX - startX.value;
-};
-const onTouchEnd = () => finishDrag();
-
-const onMouseDown = (e: MouseEvent) => {
+const onPointerDown = (e: PointerEvent) => {
   isDragging.value = true;
   startX.value = e.clientX;
   dragOffset.value = 0;
 };
 
-const onMouseMove = (e: MouseEvent) => {
+const onPointerMove = (e: PointerEvent) => {
   if (!isDragging.value) return;
   dragOffset.value = e.clientX - startX.value;
 };
 
-const onMouseUp = () => finishDrag();
+const onPointerUp = () => finishDrag();
 
 /** 吸附邏輯 */
 const finishDrag = () => {
@@ -96,13 +77,10 @@ defineExpose({ resetIndex });
 <template>
   <div
     class="w-full lg:w-[55%] bg-black flex items-center justify-center relative group min-h-75 lg:h-full overflow-hidden"
-    @touchstart="onTouchStart"
-    @touchmove="onTouchMove"
-    @touchend="onTouchEnd"
-    @mousedown="onMouseDown"
-    @mousemove="onMouseMove"
-    @mouseup="onMouseUp"
-    @mouseleave="onMouseUp"
+    @pointerdown="onPointerDown"
+    @pointermove="onPointerMove"
+    @pointerup="onPointerUp"
+    @pointercancel="onPointerUp"
   >
     <template v-if="articleImages.length > 0">
       <div

@@ -17,13 +17,13 @@ export const apiPostArticle = async (data: any) => {
   }
 };
 
-//取得文章列表
+// 取得文章列表
 export const apiGetArticle = async (param: any) => {
   try {
     const res = await APITaos.getParams("", URL_ARTICLE, param);
     return res.data;
   } catch (e) {
-    console.error("ERR! apiPostArticle", e);
+    console.error("ERR! apiGetArticle", e);
     return Promise.reject(e);
   }
 };
@@ -36,7 +36,7 @@ export const apiPostArticleLike = async (articleId: number) => {
     });
     return res.data;
   } catch (e) {
-    console.error("ERR! apiPostArticle", e);
+    console.error("ERR! apiPostArticleLike", e);
     return Promise.reject(e);
   }
 };
@@ -62,7 +62,7 @@ export const apiGetComment = async (articleId: number) => {
     });
     return res.data;
   } catch (e) {
-    console.error("ERR! apiPostArticle", e);
+    console.error("ERR! apiGetComment", e);
     return Promise.reject(e);
   }
 };
@@ -84,11 +84,12 @@ export const apiDeleteComment = async (id: number) => {
     const res = await APITaos.delete(URL_ARTICLE, `${URL_COMMENT}/${id}`, null);
     return res.data;
   } catch (e) {
-    console.error("ERR! apiPostComment", e);
+    console.error("ERR! apiDeleteComment", e);
     return Promise.reject(e);
   }
 };
 
+// 新增、取消留言讚
 export const apiPostCommentLike = async (id: number) => {
   try {
     const res = await APITaos.postParams(
@@ -99,6 +100,17 @@ export const apiPostCommentLike = async (id: number) => {
     return res.data;
   } catch (e) {
     console.error("ERR! apiPostCommentLike", e);
+    return Promise.reject(e);
+  }
+};
+
+// 取得收藏文章
+export const apiGetFavoriteArticle = async (param: any) => {
+  try {
+    const res = await APITaos.getParams(URL_ARTICLE, URL_FAVORITE, param);
+    return res.data;
+  } catch (e) {
+    console.error("ERR! apiGetArticle", e);
     return Promise.reject(e);
   }
 };
