@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useModalStoreStore } from "@/stores/modalStore";
-const modalStore = useModalStoreStore();
+import { useModalStore } from "@/stores/modalStore";
+const modalStore = useModalStore();
 const props = defineProps<{
   title?: string;
   width?: string;
@@ -25,7 +25,7 @@ const close = () => {
     <div
       v-if="modalStore.mode"
       class="fixed inset-0 overflow-hidden h-full"
-      :class="[modalStore.mode === 'view' ? 'z-50' : 'z-10']"
+      :class="[modalStore.mode === 'articleView' ? 'z-50' : 'z-10']"
     >
       <div
         class="absolute inset-0 bg-black/40 backdrop-blur-sm hidden lg:block"
@@ -57,8 +57,9 @@ const close = () => {
 
           <!-- content -->
           <div
+            class="no-scrollbar"
             :class="[
-              modalStore.mode === 'view'
+              modalStore.mode === 'articleView'
                 ? 'h-[85vh] flex flex-col overflow-hidden'
                 : 'flex-1 min-h-0 overflow-y-auto px-5 py-4',
             ]"

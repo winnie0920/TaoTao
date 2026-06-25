@@ -3,9 +3,9 @@ import { apiLogout } from "@/api/login";
 import JWT from "@/utils/cookies.js";
 import router from "@/router";
 import { useAlertStore } from "@/stores/alertStore";
-import { useModalStoreStore } from "@/stores/modalStore";
+import { useModalStore } from "@/stores/modalStore";
 
-const modalStore = useModalStoreStore();
+const modalStore = useModalStore();
 const alertStore = useAlertStore();
 
 type MenuItem = {
@@ -85,7 +85,9 @@ onUnmounted(() => {
     <!-- 手機板 HEADER -->
     <header class="lg:hidden shrink-0 bg-white pt-[env(safe-area-inset-top)]">
       <nav class="flex items-center justify-between px-6 py-3">
-        <button @click="modalStore.openModal('create', null, '新增貼文')">
+        <button
+          @click="modalStore.openModal('articleCreate', null, '新增貼文')"
+        >
           <SvgIcon icon-name="Common-Plus" class="h-5 w-5" />
         </button>
 
@@ -134,6 +136,7 @@ onUnmounted(() => {
   <!-- 彈窗 -->
   <ArticleEditor />
   <ArticleView />
+  <UserEditor />
 </template>
 
 <style></style>

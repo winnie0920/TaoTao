@@ -7,7 +7,7 @@ export const isRequired =
       return v.trim().length > 0 || msg;
     }
     if (typeof v === "number") {
-      return v !== null && v !== undefined ? true : msg;
+      return v > 0 ? true : msg;
     }
     if (Array.isArray(v)) {
       return v.length > 0 || msg;
@@ -25,6 +25,15 @@ export const isPhone = (msg: string) => (v: string) =>
   /^09\d{8}$/.test(v.replace(/[\s()-]/g, "")) ||
   /^0[2-8]\d{7,8}$/.test(v.replace(/[\s()-]/g, "")) ||
   msg;
+
+export const isImageUploaded =
+  (msg: string) =>
+  (v: unknown): true | string => {
+    if (Array.isArray(v)) {
+      return v.length > 0 || msg;
+    }
+    return msg;
+  };
 
 // 驗證程式碼
 

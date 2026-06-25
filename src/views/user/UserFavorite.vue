@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useHomeStore } from "@/stores/HomeStore";
+import { useHomeStore } from "@/stores/homeStore";
 
 const homeStore = useHomeStore();
 onMounted(() => {

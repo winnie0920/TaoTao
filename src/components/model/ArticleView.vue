@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { LikeStatus, favoriteStatus } from "@/types";
-import { useHomeStore } from "@/stores/HomeStore";
-import { useModalStoreStore } from "@/stores/modalStore";
+import { useHomeStore } from "@/stores/homeStore";
+import { useModalStore } from "@/stores/modalStore";
 import {
   apiPostArticleLike,
   apiPostFavoriteLike,
@@ -13,7 +13,7 @@ import { useAlertStore } from "@/stores/alertStore";
 
 // 預覽彈窗
 const homeStore = useHomeStore();
-const modalStore = useModalStoreStore();
+const modalStore = useModalStore();
 const alertStore = useAlertStore();
 
 const commentContent = ref<string>("");
@@ -133,7 +133,7 @@ onUnmounted(() => {
 watch(
   () => modalStore.mode,
   (newMode) => {
-    if (newMode === "view" && homeStore.selectedArticle) {
+    if (newMode === "articleView" && homeStore.selectedArticle) {
       homeStore.initComment(homeStore.selectedArticle.id);
     }
   },
@@ -142,7 +142,7 @@ watch(
 
 <template>
   <ModelPopup
-    v-show="modalStore.mode === 'view' && homeStore.selectedArticle"
+    v-show="modalStore.mode === 'articleView' && homeStore.selectedArticle"
     @close="modalStore.close"
   >
     <template #default>
@@ -162,8 +162,18 @@ watch(
           >
             <!-- 作者 -->
             <div class="flex items-center gap-2">
-              <div class="text-sm font-medium">
-                @{{ homeStore.selectedArticle?.userName?.split("@")[0] }}
+              <div class="flex items-center gap-2 text-sm font-medium">
+                <img
+                  :src="
+                    homeStore.selectedArticle?.userImage ||
+                    homeStore.getImageUrl('Blank.jpg', 'images')
+                  "
+                  alt="Avatar"
+                  class="w-8 h-8 rounded-full bg-zinc-200 shrink-0 object-cover"
+                />
+                <span>
+                  @{{ homeStore.selectedArticle?.nickname?.split("@")[0] }}
+                </span>
               </div>
             </div>
 
@@ -263,11 +273,18 @@ watch(
               :key="comment.id"
               class="flex gap-3"
             >
-              <div class="w-8 h-8 rounded-full bg-zinc-200 shrink-0"></div>
+              <img
+                :src="
+                  comment.imageUrl ||
+                  homeStore.getImageUrl('Blank.jpg', 'images')
+                "
+                alt="Avatar"
+                class="w-8 h-8 rounded-full bg-zinc-200 shrink-0"
+              />
               <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between">
                   <div class="text-xs font-bold text-zinc-900">
-                    {{ comment.username }}
+                    @{{ comment.nickname }}
                   </div>
 
                   <div class="relative">

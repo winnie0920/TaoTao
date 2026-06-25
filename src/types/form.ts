@@ -12,5 +12,5 @@ export type Field = {
 
 export type UploadImage = {
   file: File;
-  preview: string;
+  preview?: string;
 };

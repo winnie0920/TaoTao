@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useHomeStore } from "@/stores/HomeStore";
-import { useModalStoreStore } from "@/stores/modalStore";
+import { useHomeStore } from "@/stores/homeStore";
+import { useModalStore } from "@/stores/modalStore";
 import { useAlertStore } from "@/stores/alertStore";
 import { apiPostImg } from "@/api/image.ts";
 import { apiPostArticle } from "@/api/Article.ts";
@@ -9,7 +9,7 @@ import { usePostTags } from "@/composables/usePostTags";
 import type { Field, UploadImage } from "@/types";
 
 const homeStore = useHomeStore();
-const modalStore = useModalStoreStore();
+const modalStore = useModalStore();
 const alertStore = useAlertStore();
 
 // 編輯彈窗
@@ -53,7 +53,13 @@ const schema = computed<Field[]>(() => [
     col: 1,
     options: homeStore.cateGories,
   },
-  { type: "textarea", name: "content", label: "內容", col: 2 },
+  {
+    type: "textarea",
+    name: "content",
+    label: "內容",
+    col: 2,
+    placeholder: "輸入內容",
+  },
 ]);
 
 const { selectedTags, toggleTag, removeTag } = usePostTags(form);
@@ -113,7 +119,7 @@ const handleClose = () => {
 
 <template>
   <ModelPopup
-    v-show="modalStore.mode == 'create'"
+    v-show="modalStore.mode == 'articleCreate'"
     @close="handleClose()"
     :title="modalStore.title"
     width="w-[480px]"

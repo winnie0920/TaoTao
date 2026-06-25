@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { useHomeStore } from "@/stores/HomeStore";
-import { useModalStoreStore } from "@/stores/modalStore";
+import { useHomeStore } from "@/stores/homeStore";
+import { useModalStore } from "@/stores/modalStore";
 import ArticleCarousel from "@/components/article/ArticleCarousel.vue";
 
+const props = defineProps<{
+  displayMode?: "single";
+}>();
+
 const homeStore = useHomeStore();
-const modalStore = useModalStoreStore();
+const modalStore = useModalStore();
 const carouselRef = ref<InstanceType<typeof ArticleCarousel> | null>(null);
 
 const openModal = async (item: any) => {
@@ -13,7 +17,7 @@ const openModal = async (item: any) => {
   nextTick(() => {
     carouselRef.value?.resetIndex();
   });
-  modalStore.openModal("view", item, item.title);
+  modalStore.openModal("articleView", item, item.title);
 };
 </script>
 
@@ -30,7 +34,12 @@ const openModal = async (item: any) => {
 
   <div
     v-else-if="homeStore.articles.length > 0"
-    class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"
+    class="grid gap-6"
+    :class="
+      props.displayMode === 'single'
+        ? 'grid-cols-1'
+        : 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3'
+    "
   >
     <ArticleCard
       v-for="item in homeStore.articles"

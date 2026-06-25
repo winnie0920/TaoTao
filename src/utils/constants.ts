@@ -11,5 +11,8 @@ export const URL_ARTICLE = "article";
 export const URL_LIKE = "like";
 export const URL_FAVORITE = "favorite";
 export const URL_COMMENT = "comment";
+export const URL_USER = "user";
+export const URL_DASHBOARD = "dashboard";
+export const URL_UPDATE = "update";
 
 export const URL_UPLOAD = "upload";

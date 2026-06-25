@@ -17,7 +17,8 @@ export interface ArticleTag {
 export interface Article {
   id: number;
   userId: number;
-  userName: string;
+  nickname: string;
+  userImage: string;
   title: string;
   content: string;
 
@@ -59,8 +60,9 @@ export interface Comment {
   articleId: number;
   userId: number;
   canDelete: boolean;
-  username: string;
+  nickname: string;
   content: string;
+  imageUrl: string;
   totalLikes: number;
   liked: boolean;
   createdTime?: string;

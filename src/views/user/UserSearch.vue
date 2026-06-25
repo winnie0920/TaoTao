@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router";
-import { useHomeStore } from "@/stores/HomeStore";
+import { useHomeStore } from "@/stores/homeStore";
 
 const route = useRoute();
 const homeStore = useHomeStore();

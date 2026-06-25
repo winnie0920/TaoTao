@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 
-type ModalMode = "create" | "view" | "edit" | null;
+type ModalMode = "articleCreate" | "articleView" | "edit" | "userEdit" | null;
 type FormStep = "form" | "tag" | "review" | null; // 切換彈窗頁面
 
-export const useModalStoreStore = defineStore("modal", {
+export const useModalStore = defineStore("modal", {
   state: () => ({
     isOpen: false as boolean,
     mode: null as ModalMode,

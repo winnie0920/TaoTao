@@ -1,4 +1,4 @@
-import { useHomeStore } from "@/stores/HomeStore";
+import { useHomeStore } from "@/stores/homeStore";
 
 export function usePostTags(form: any) {
   const homeStore = useHomeStore();

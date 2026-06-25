@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { useHomeStore } from "@/stores/homeStore";
 import type { Article } from "@/types";
 defineProps<{
   article: Article;
 }>();
+const homeStore = useHomeStore();
 </script>
 
 <template>
@@ -37,7 +39,16 @@ defineProps<{
       </h2>
 
       <div class="flex items-center justify-between mt-4 text-sm text-zinc-500">
-        <span> @{{ article.userName?.split("@")[0] }} </span>
+        <div class="flex items-center gap-2">
+          <img
+            :src="
+              article.userImage || homeStore.getImageUrl('Blank.jpg', 'images')
+            "
+            alt="Avatar"
+            class="w-8 h-8 rounded-full bg-zinc-200 shrink-0 object-cover"
+          />
+          <span>@{{ article.nickname }}</span>
+        </div>
 
         <span class="flex items-center gap-1">
           <SvgIcon

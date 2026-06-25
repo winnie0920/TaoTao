@@ -76,6 +76,7 @@ onBeforeUnmount(() => {
         v-if="field.type === 'input'"
         :value="modelValue[field.name]"
         @input="update(field.name, ($event.target as HTMLInputElement).value)"
+        :placeholder="field.placeholder"
         class="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-zinc-900 placeholder-zinc-400 transition-all duration-200 ease-in-out focus:border-zinc-500 focus:ring-4 focus:ring-zinc-100 focus:outline-none"
       />
 
@@ -86,6 +87,7 @@ onBeforeUnmount(() => {
         @input="
           update(field.name, ($event.target as HTMLTextAreaElement).value)
         "
+        :placeholder="field.placeholder"
         class="resize-none h-32 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-zinc-900 placeholder-zinc-400 transition-all duration-200 ease-in-out focus:border-zinc-500 focus:ring-4 focus:ring-zinc-100 focus:outline-none"
       />
 

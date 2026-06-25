@@ -1,19 +1,15 @@
 import axios from "axios";
 import router from "@/router";
+
+import JWT from "@/utils/cookies.js";
 import type {
   AxiosInstance,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
-import JWT from "@/utils/cookies.js";
-import {
-  PER_AUTH,
-  URL_AUTHENTICATE,
-  URL_REGISTER,
-  URL_LOGOUT,
-} from "@/utils/constants.js";
+import { PER_AUTH, URL_AUTHENTICATE, URL_REGISTER } from "@/utils/constants.js";
 import type { ApiResponse } from "@/types";
-import { apiRefreshToken } from "@/api/login.js";
+import { apiRefreshToken } from "@/api/login.ts";
 import { useAlertStore } from "@/stores/alertStore";
 
 // 取消請求
@@ -78,23 +74,18 @@ AxiosTao.interceptors.request.use(
 AxiosTao.interceptors.response.use(
   (response: AxiosResponse<ApiResponse>) => {
     const alertStore = useAlertStore();
-
     const { code, msg } = response.data;
-
     // 抛出意外錯誤 Http200 -> code!==200
     if (code < 200 || code >= 300) {
       alertStore.pushMsg("error", msg || "操作失敗，請稍後再試！");
       return Promise.reject(response.data);
     }
-
     return response;
   },
   (error) => {
     const alertStore = useAlertStore();
-
     const code = error?.response?.data?.code;
     const msg = error?.response?.data?.msg;
-
     switch (code) {
       case 9004:
         JWT.removeAllToken();

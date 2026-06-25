@@ -25,7 +25,6 @@ function getRefreshToken(): string | undefined {
 
 function saveToken(token: string, exp: string | number | Date): void {
   const expiredDate = new Date(exp);
-  console.log(exp);
   document.cookie = `${VITE_TAOTAO_TOKEN_KEY}=${token}; expires=${expiredDate.toUTCString()}; path=/`;
 }
 
@@ -36,8 +35,6 @@ function saveRefreshToken(token: string, exp: string | number | Date): void {
 
 function saveAllToken(res: ApiResponse<SaveTokenResponse>): void {
   const { access_token, expired_date, refresh_token, expired_dateR } = res.data;
-  console.log(res.data);
-
   saveToken(access_token, expired_date);
   saveRefreshToken(refresh_token, expired_dateR);
 }

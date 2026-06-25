@@ -6,7 +6,7 @@ export interface LoginForm {
 export interface RegisterForm {
   firstname: String;
   lastname: String;
-  username: String;
+  nickname: String;
   email: string;
   password: string;
   phone: string;

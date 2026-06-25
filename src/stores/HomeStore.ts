@@ -14,6 +14,7 @@ import {
   apiGetComment,
   apiGetFavoriteArticle,
 } from "@/api/Article";
+import { apiGetUserArticle } from "@/api/User";
 
 export const useHomeStore = defineStore("home", {
   state: () => ({
@@ -92,10 +93,20 @@ export const useHomeStore = defineStore("home", {
       try {
         const { data } = await apiGetComment(articleId);
         this.comments = data;
-        console.log(data);
       } catch (e) {
         console.error(e);
       }
+    },
+    // 取得使用者發佈的文章
+    async initUserArticles(
+      reset = false,
+      filter: ArticleFilter = {},
+    ): Promise<void> {
+      await this.fetchArticles(apiGetUserArticle, reset, {
+        keyword: filter.keyword ?? null,
+        categoryId: filter.categoryId ?? null,
+        countryId: filter.countryId ?? null,
+      });
     },
 
     // 清空文章狀態
@@ -133,6 +144,12 @@ export const useHomeStore = defineStore("home", {
         this.loading = false;
         this.refreshing = false;
       }
+    },
+    getImageUrl(name: string, path?: string) {
+      return new URL(
+        `/src/assets/${path ? `${path}/` : ""}${name}`,
+        import.meta.url,
+      ).href;
     },
   },
 });
