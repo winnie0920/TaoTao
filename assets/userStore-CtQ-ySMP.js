@@ -1,0 +1,1 @@
+import{o as e}from"./index-DmlD4pLB.js";import{r as t}from"./ArticleCarousel-5-TA6yNO.js";var n=e(`user`,{state:()=>({user:null}),actions:{async initUserDashboard(){try{let{data:e}=await t();this.user=e}catch(e){console.error(e)}}}});export{n as t};
